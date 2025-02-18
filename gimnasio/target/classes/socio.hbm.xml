@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.iticbcn.miguel_vera.model.Socio" table="Socio">
+        <id name="id" column="id">
+            <generator class="identity"/>
+        </id>
+        <many-to-one name="persona" class="com.iticbcn.miguel_vera.model.Persona" column="id_persona" not-null="true"/>
+
+        <property name="edad" column="edad" type="integer"/>
+        <property name="email" column="email" type="string"/>
+        <property name="fechaInscripcion" column="fecha_inscripcion" type="string"/>
+        <property name="cuota" column="cuota" type="float"/>
+
+        <many-to-one name="gimnasio" class="com.iticbcn.miguel_vera.model.Gimnasio" column="id_gimnasio" not-null="true"/>
+    </class>
+</hibernate-mapping>
