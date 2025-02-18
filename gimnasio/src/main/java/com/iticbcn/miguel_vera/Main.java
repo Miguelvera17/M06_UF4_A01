@@ -269,7 +269,7 @@ public class Main {
 
     // CRUD entidad SOCIO
 
-    public static void insertPersona(SessionFactory sesion) throws IOException{
+    public static void insertPersona(SessionFactory sesion) throws Exception{
         System.out.print("Introduzca el DNI de la persona >> ");
         String dni = br.readLine();
         System.out.print("Introduzca la nombre de la persona >> ");
@@ -277,16 +277,17 @@ public class Main {
         System.out.print("Introduzca el teléfono de la persona >> ");
         int telefono = Integer.parseInt(br.readLine());
         Persona persona = new Persona (dni, nombre, telefono);
-        PersonaDAO.create(sesion, persona);
+        PersonaDAO pDAO = new PersonaDAO(sesion);
+        pDAO.save(persona);
     }
 
-    public static Persona findPersona(SessionFactory sesion, int id) {
+    public static Persona findPersona(SessionFactory sesion, int id) throws Exception{
         PersonaDAO pDAO = new PersonaDAO(sesion);
-        Persona persona = pDAO.find(id);
+        Persona persona = pDAO.get(id);
         return persona;
     }
 
-    public static void updatePersona(SessionFactory sesion) throws IOException{
+    public static void updatePersona(SessionFactory sesion) throws Exception{
         System.out.println("\nQué Campo desea actualizar?");
         System.out.println("1. DNI  2. Nombre    3. Teléfono");
         
@@ -295,7 +296,7 @@ public class Main {
 
         System.out.print("\nIntroduzca el ID de la persona >> ");
         int id = Integer.parseInt(br.readLine());
-
+        PersonaDAO pDAO = new PersonaDAO(sesion);
         Persona persona;
         while (true) {        
             persona = findPersona(sesion, id);
@@ -327,16 +328,17 @@ public class Main {
                 System.out.println("Opción incorrecta");
                 return;
         }
-        PersonaDAO.update(persona);
+        pDAO.update(persona);
     }
 
-    public static void deletePersona(SessionFactory sesion) throws IOException{
+    public static void deletePersona(SessionFactory sesion) throws Exception{
         System.out.print("Indique el ID de la persona a eliminar >> ");
         int id = Integer.parseInt(br.readLine());
         Persona persona = findPersona(sesion,id);
+        PersonaDAO pDAO = new PersonaDAO(sesion);
         while(true) {
             if (persona != null) {
-                ClaseDAO.delete(id);
+                pDAO.delete(persona);
                 System.out.println("Persona borrada con éxito");
                 break;
             } else {
@@ -348,19 +350,11 @@ public class Main {
         }
     }
 
-    public static void findAllPersona(SessionFactory sesion) throws IOException {
+    public static void findAllPersona(SessionFactory sesion) throws Exception {
         PersonaDAO pDAO = new PersonaDAO(sesion);
-        List<Persona> personaList = pDAO.findAll();
+        List<Persona> personaList = pDAO.getAll();
         for (Persona persona : personaList) {
             System.out.println(persona.toString());
-        }
-    }
-
-    public static void findGroupByPersona(SessionFactory sesion) throws IOException {
-        PersonaDAO pDAO = new PersonaDAO(sesion);
-        List<Object[]> personaList = pDAO.findGroupBy();
-        for (Object[] persona : personaList) {
-            System.out.println("Nombres: " + persona[0] + ", Cantidad de personas: " + persona[1]);
         }
     }
 
@@ -384,7 +378,8 @@ public class Main {
                 System.out.print("Introduzca la cuota a pagar del socio >> ");
                 float cuota = Float.parseFloat(br.readLine());
                 Socio socio = new Socio (persona, edad, email, fechaInscripcion, cuota, gimnasio );
-                SocioDAO.create(sesion, socio);
+                SocioDAO sDAO = new SocioDAO(sesion);
+                sDAO.save(socio);
             } else {
                 System.out.println("ID del gimnasio incorrecto, vuelva a intentar");
                 insertSocio(sesion);
@@ -395,13 +390,13 @@ public class Main {
         }
     }
 
-    public static Socio findSocio(SessionFactory sesion, int id) throws IOException{
+    public static Socio findSocio(SessionFactory sesion, int id) throws Exception{
         SocioDAO sDAO = new SocioDAO(sesion);
-        Socio socio = sDAO.find(id);
+        Socio socio = sDAO.get(id);
         return socio;
     }
 
-    public static void updateSocio(SessionFactory sesion) throws IOException{
+    public static void updateSocio(SessionFactory sesion) throws Exception{
         System.out.println("\nQué Campo desea actualizar?");
         System.out.println("1. edad  2. email    3. fecha de inscripción    4. cuota");
         
@@ -410,7 +405,7 @@ public class Main {
 
         System.out.print("\nIntroduzca el ID del socio >> ");
         int id = Integer.parseInt(br.readLine());
-
+        SocioDAO sDAO = new SocioDAO(sesion);
         Socio socio;
         while (true) {        
             socio = findSocio(sesion, id);
@@ -447,16 +442,17 @@ public class Main {
                 System.out.println("Opción incorrecta");
                 return;
         }
-        SocioDAO.update(socio);
+        sDAO.update(socio);
     }
 
-    public static void deleteSocio(SessionFactory sesion) throws IOException {
+    public static void deleteSocio(SessionFactory sesion) throws Exception {
         System.out.print("Indique el ID del socio a eliminar >> ");
         int id = Integer.parseInt(br.readLine());
         Socio socio = findSocio(sesion,id);
+        SocioDAO sDAO = new SocioDAO(sesion);
         while(true) {
             if (socio != null) {
-                ClaseDAO.delete(id);
+                sDAO.delete(socio);
                 System.out.println("Socio borrado con éxito");
                 break;
             } else {
@@ -468,19 +464,11 @@ public class Main {
         }
     }
 
-    public static void findAllSocio(SessionFactory sesion) throws IOException {
+    public static void findAllSocio(SessionFactory sesion) throws Exception {
         SocioDAO sDAO = new SocioDAO(sesion);
-        List<Socio> socioList = sDAO.findAll();
+        List<Socio> socioList = sDAO.getAll();
         for (Socio socio : socioList) {
             System.out.println(socio.toString());
-        }
-    }
-
-    public static void findGroupBySocio(SessionFactory sesion) throws IOException {
-        SocioDAO sDAO = new SocioDAO(sesion);
-        List<Object[]> socioList = sDAO.findGroupBy();
-        for (Object[] socio : socioList) {
-            System.out.println("Fecha de Inscripción: " + socio[0] + ", Cantidad de socios: " + socio[1]);
         }
     }
 
@@ -552,9 +540,10 @@ public class Main {
         System.out.print("Indique el ID del gimnasio a eliminar >> ");
         int id = Integer.parseInt(br.readLine());
         Gimnasio gimnasio = findGimnasio(sesion,id);
+        GimnasioDAO gDAO = new GimnasioDAO(sesion);
         while(true) {
             if (gimnasio != null) {
-                ClaseDAO.delete(id);
+                gDAO.delete(gimnasio);
                 System.out.println("Gimnasio borrado con éxito");
                 break;
             } else {
@@ -576,7 +565,7 @@ public class Main {
 
         // CRUD entidad CLASE
 
-    public static void insertClase(SessionFactory sesion) throws IOException{
+    public static void insertClase(SessionFactory sesion) throws Exception{
         System.out.print("Introduzca el nombre de la clase >> ");
         String nombre = br.readLine();
         System.out.print("Introduzca el horario de la clase >> ");
@@ -584,16 +573,17 @@ public class Main {
         System.out.print("Introduzca el aforo de la clase >> ");
         int aforo = Integer.parseInt(br.readLine());
         Clase clase = new Clase (nombre, horario, aforo);
-        ClaseDAO.create(sesion,clase);
+        ClaseDAO cDAO = new ClaseDAO(sesion);
+        cDAO.save(clase);
     }
 
-    public static Clase findClase (SessionFactory sesion, int id) {
+    public static Clase findClase (SessionFactory sesion, int id) throws Exception{
         ClaseDAO cDAO = new ClaseDAO(sesion);
-        Clase clase = cDAO.find(id);
+        Clase clase = cDAO.get(id);
         return clase;
     }
 
-    public static void updateClase(SessionFactory sesion) throws IOException{
+    public static void updateClase(SessionFactory sesion) throws Exception{
         System.out.println("\nQué Campo desea actualizar?");
         System.out.println("1. nombre  2. horario    3. aforo");
         
@@ -602,7 +592,7 @@ public class Main {
 
         System.out.print("\nIntroduzca el ID de la clase >> ");
         int id = Integer.parseInt(br.readLine());
-
+        ClaseDAO cDAO = new ClaseDAO(sesion);
         Clase clase;
         while (true) {        
             clase = findClase(sesion, id);
@@ -636,16 +626,17 @@ public class Main {
                 System.out.println("Opción incorrecta");
                 return;
         }
-        ClaseDAO.update(clase);
+        cDAO.update(clase);
     }
 
-    public static void deleteClase(SessionFactory sesion)throws IOException {
+    public static void deleteClase(SessionFactory sesion)throws Exception {
         System.out.print("Indique el ID de la clase a eliminar >> ");
         int id = Integer.parseInt(br.readLine());
         Clase clase = findClase(sesion,id);
+        ClaseDAO cDAO = new ClaseDAO(sesion);
         while(true) {
             if (clase != null) {
-                ClaseDAO.delete(id);
+                cDAO.delete(clase);
                 System.out.println("Clase borrada con éxito");
                 break;
             } else {
@@ -657,9 +648,9 @@ public class Main {
         }
     }
 
-    public static void findAllClase(SessionFactory sesion) throws IOException {
+    public static void findAllClase(SessionFactory sesion) throws Exception {
         ClaseDAO cDAO = new ClaseDAO(sesion);
-        List<Clase> claseList = cDAO.findAll();
+        List<Clase> claseList = cDAO.getAll();
         for (Clase clase : claseList) {
             System.out.println(clase.toString());
         }
