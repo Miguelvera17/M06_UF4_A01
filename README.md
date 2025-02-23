@@ -19,7 +19,15 @@ e) Al separar la capa de acceso a datos, se pueden hacer pruebas unitarias simul
 
 # Pregunta 3:
 
-No se realizo ni un cambio en el codigo principal
+a) No se realizo ni un cambio en el codigo Main 
+b) Se modifico las clases DAO, extendiendo de la clase GenDAOImpl para que implementa la interface GenDAO y utiliza los metodos heredados.
+c) Los controladores se mantienen igual
 
 # Pregunta 4:
 
+![alt text](image.png)
+
+
+# Pregunta 5:
+
+La clase abstracta es útil, pero no indispensable. Todo dependerá de la estructura del proyecto y de los objetivos de mantenibilidad y escalabilidad. Una clase abstracta en un DAO permite definir una estructura común para todos los DAOs de distintas entidades. Generalmente, incluye métodos básicos como create(), read(), update() y delete(), evitando así duplicación de código.
